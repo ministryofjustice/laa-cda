@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'laa/cda'
+require 'webmock/rspec'
 require 'simplecov'
 SimpleCov.start
 
