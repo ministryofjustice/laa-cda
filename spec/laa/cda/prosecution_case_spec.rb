@@ -3,8 +3,6 @@
 require 'laa/cda/prosecution_case'
 
 RSpec.describe LAA::Cda::ProsecutionCase do
-  let(:connection) { instance_double(OAuth2::AccessToken) }
-
   describe 'Class methods' do
     describe '.search' do
       subject(:cases) { described_class.search(**search_params) }
@@ -43,17 +41,46 @@ RSpec.describe LAA::Cda::ProsecutionCase do
           {
             total_results: 2,
             results: [
-              { prosecution_case_reference: 'TEST12345', case_status: 'INACTIVE' },
+              {
+                prosecution_case_reference: 'TEST12345', case_status: 'INACTIVE',
+                defendant_summaries: [
+                  {
+                    id: '12345678-90ab-cdef-1234-567890abcdef',
+                    first_name: 'Tom',
+                    middle_name: '',
+                    last_name: 'Cobley',
+                    arrest_summons_number: '1234567890AB',
+                    date_of_birth: '2000-12-27'
+                  },
+                  {
+                    id: '12345678-90ab-cdef-1234-567890abcdee',
+                    first_name: 'Arthur',
+                    middle_name: 'Justice',
+                    last_name: 'Raffles',
+                    arrest_summons_number: '1234567890AC',
+                    date_of_birth: '1939-08-17'
+                  }
+                ]
+              },
               { prosecution_case_reference: 'TEST54321', case_status: 'ACTIVE' }
             ]
           }
         end
 
         it { is_expected.to contain_exactly(instance_of(described_class), instance_of(described_class)) }
+
         it { expect(cases[0].case_number).to eq 'TEST12345' }
-        it { expect(cases[0].status).to eq 'INACTIVE' }
         it { expect(cases[1].case_number).to eq 'TEST54321' }
+
+        it { expect(cases[0].status).to eq 'INACTIVE' }
         it { expect(cases[1].status).to eq 'ACTIVE' }
+
+        it do
+          expect(cases[0].defendants)
+            .to contain_exactly(instance_of(LAA::Cda::Defendant), instance_of(LAA::Cda::Defendant))
+        end
+
+        it { expect(cases[1].defendants).to eq([]) }
       end
     end
   end
