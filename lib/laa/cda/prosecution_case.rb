@@ -3,7 +3,7 @@
 module LAA
   module Cda
     class ProsecutionCase
-      attr_reader :case_number, :status, :defendants
+      attr_reader :case_number, :status, :defendants, :hearings
 
       def self.search(**kwargs)
         JSON.parse(
@@ -19,6 +19,7 @@ module LAA
         @case_number = kwargs['prosecution_case_reference']
         @status = kwargs['case_status']
         @defendants = kwargs['defendant_summaries'].to_a.map { |defendant| LAA::Cda::Defendant.new(**defendant) }
+        @hearings = kwargs['hearing_summaries'].to_a.map { |hearing| LAA::Cda::Hearing.new(**hearing) }
       end
     end
   end

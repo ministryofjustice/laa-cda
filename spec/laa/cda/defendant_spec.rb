@@ -8,11 +8,9 @@ RSpec.describe LAA::Cda::Defendant do
   describe '#id' do
     subject { defendant.id }
 
-    context 'with an arrest_summons_number' do
-      let(:defendant_data) { { 'id' => '12345678-90ab-cdef-1234-567890abcdef' } }
+    let(:defendant_data) { { 'id' => '12345678-90ab-cdef-1234-567890abcdef' } }
 
-      it { is_expected.to eq '12345678-90ab-cdef-1234-567890abcdef' }
-    end
+    it { is_expected.to eq '12345678-90ab-cdef-1234-567890abcdef' }
   end
 
   describe '#name' do

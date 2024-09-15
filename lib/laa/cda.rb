@@ -4,6 +4,9 @@ require 'laa/cda/configuration'
 require 'laa/cda/prosecution_case'
 require 'laa/cda/defendant'
 require 'laa/cda/offence'
+require 'laa/cda/hearing'
+require 'laa/cda/court'
+require 'laa/cda/hearing_day'
 
 module LAA
   module Cda

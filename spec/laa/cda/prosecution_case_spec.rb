@@ -103,5 +103,40 @@ RSpec.describe LAA::Cda::ProsecutionCase do
 
       it { is_expected.to eq 'ACTIVE' }
     end
+
+    describe '#hearings' do
+      subject { prosecution_case.hearings }
+
+      let(:case_data) do
+        {
+          'hearing_summaries' => [
+            {
+              'id' => '12345678-90ab-cdef-1234-567890abcdef',
+              'hearing_type' => 'Trial (TRL)',
+              'court_centre' => {
+                'id' => '12345678-90ab-cdef-1234-567890abcdef',
+                'name' => 'Manchester Crown Court'
+              },
+              'hearing days' => [
+                { 'sitting_day' => '2019-10-26T08:30:00' },
+                { 'sitting_day' => '2019-10-26T08:45:00' },
+                { 'sitting_day' => '2019-10-26T09:00:00' }
+              ]
+            },
+            {
+              'id' => '12345678-90ab-cdef-1234-567890abcdee',
+              'hearing_type' => 'Pre-Trial Review (TRL)',
+              'court_centre' => {
+                'id' => '12345678-90ab-cdef-1234-567890abcdee',
+                'name' => 'Derby Crown Court'
+              },
+              'hearing days' => [{ 'sitting_day' => '2019-10-26T08:30:00' }]
+            }
+          ]
+        }
+      end
+
+      it { is_expected.to contain_exactly(instance_of(LAA::Cda::Hearing), instance_of(LAA::Cda::Hearing)) }
+    end
   end
 end
