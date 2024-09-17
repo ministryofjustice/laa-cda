@@ -53,6 +53,14 @@ cases = LAA::Cda::ProsecutionCase.search(name:, date_of_birth:)
 | Attribute | Notes |
 |---|---|
 | `title` | Title of the offence. |
+| `pleas` | List of pleas on the offence. An array of `LAA::Cda::Plea` instances. |
+
+### `LAA::Cda::Plea`
+
+| Attribute | Notes |
+|---|---|
+| `value` | The plea, such as `GUILTY` or `NO_PLEA`. |
+| `date` | The date the plea was submitted. |
 
 ### `LAA::Cda::Hearing`
 

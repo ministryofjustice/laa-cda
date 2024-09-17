@@ -7,6 +7,7 @@ require 'laa/cda/offence'
 require 'laa/cda/hearing'
 require 'laa/cda/court'
 require 'laa/cda/hearing_day'
+require 'laa/cda/plea'
 
 module LAA
   module Cda
