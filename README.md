@@ -47,6 +47,7 @@ cases = LAA::Cda::ProsecutionCase.search(name:, date_of_birth:)
 | `name` | Full name of the defendant. |
 | `date_of_birth` | Date of birth of the defendant. |
 | `offences` | List of offences. An array of `LAA::Cda::Offence` instances. |
+| `representation_order` | Representation order of defendant. An instance of `LAA::Cda::RepresentationOrder` or `nil` if not present. |
 
 ### `LAA::Cda::Offence`
 
@@ -61,6 +62,15 @@ cases = LAA::Cda::ProsecutionCase.search(name:, date_of_birth:)
 |---|---|
 | `value` | The plea, such as `GUILTY` or `NO_PLEA`. |
 | `date` | The date the plea was submitted. |
+
+### `LAA::Cda::RepresentationOrder`
+
+| Attribute | Notes |
+|---|---|
+| `reference` | The LAA application reference. |
+| `start` | The effective start date. |
+| `end` | The effective end date. |
+| `contract_number` | The contract number |
 
 ### `LAA::Cda::Hearing`
 

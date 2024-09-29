@@ -117,4 +117,35 @@ RSpec.describe LAA::Cda::Defendant do
       it { is_expected.to eq([]) }
     end
   end
+
+  describe '#representation_order' do
+    subject { defendant.representation_order }
+
+    context 'with an representation_order' do
+      let(:defendant_data) do
+        {
+          'representation_order' => {
+            'laa_application_reference' => '1234567',
+            'effective_start_date' => '2024-09-01',
+            'effective_end_date' => '2024-09-02',
+            'laa_contract_number' => '1A234B'
+          }
+        }
+      end
+
+      it { is_expected.to be_an LAA::Cda::RepresentationOrder }
+    end
+
+    context 'with an blank representation_order' do
+      let(:defendant_data) { { 'representation_order' => {} } }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'without a representation_order' do
+      let(:defendant_data) { {} }
+
+      it { is_expected.to be_nil }
+    end
+  end
 end

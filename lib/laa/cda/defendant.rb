@@ -19,6 +19,12 @@ module LAA
 
       def offences = @kwargs['offence_summaries'].to_a.map { |offence| LAA::Cda::Offence.new(**offence) }
 
+      def representation_order
+        return if @kwargs['representation_order'].to_h == {}
+
+        LAA::Cda::RepresentationOrder.new(**@kwargs['representation_order'])
+      end
+
       private
 
       def first_name = @kwargs['first_name']
