@@ -103,6 +103,22 @@ RSpec.describe LAA::Cda::Defendant do
       end
 
       it { is_expected.to contain_exactly(instance_of(LAA::Cda::Offence), instance_of(LAA::Cda::Offence)) }
+
+      context 'when the offences are out of order' do
+        let(:defendant_data) do
+          {
+            'offence_summaries' => [
+              { 'order_index' => '2', 'title' => 'Offence 2' },
+              { 'order_index' => '3', 'title' => 'Offence 3' },
+              { 'order_index' => '1', 'title' => 'Offence 1' }
+            ]
+          }
+        end
+
+        it 'returns the offences in order' do
+          expect(subject.map(&:title)).to eq ['Offence 1', 'Offence 2', 'Offence 3']
+        end
+      end
     end
 
     context 'with empty offence summaries' do
@@ -146,6 +162,70 @@ RSpec.describe LAA::Cda::Defendant do
       let(:defendant_data) { {} }
 
       it { is_expected.to be_nil }
+    end
+  end
+
+  describe '#representation_orders' do
+    subject(:representation_orders) { defendant.representation_orders }
+
+    context 'with offences without representation order' do
+      let(:defendant_data) do
+        {
+          'offence_summaries' => [{ 'laa_application' => {} }, { 'laa_application' => {} }]
+        }
+      end
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'with an offence with a representation order' do
+      let(:defendant_data) do
+        {
+          'offence_summaries' => [
+            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } }
+          ]
+        }
+      end
+
+      it { is_expected.to contain_exactly(instance_of(LAA::Cda::RepresentationOrder)) }
+      it { expect(representation_orders.first.reference).to eq '8765432' }
+      it { expect(representation_orders.first.contract_number).to eq '1A234B' }
+      it { expect(representation_orders.first.date).to eq Date.parse('2024-09-01') }
+    end
+
+    context 'with multiple offences with different representation orders' do
+      let(:defendant_data) do
+        {
+          'offence_summaries' => [
+            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } },
+            { 'laa_application' => { 'reference' => '1234567', 'status_date' => '2024-09-02', 'contract_number' => '1A234C' } }
+          ]
+        }
+      end
+
+      it { is_expected.to contain_exactly(instance_of(LAA::Cda::RepresentationOrder), instance_of(LAA::Cda::RepresentationOrder)) }
+      it { expect(representation_orders[0].reference).to eq '8765432' }
+      it { expect(representation_orders[0].contract_number).to eq '1A234B' }
+      it { expect(representation_orders[0].date).to eq Date.parse('2024-09-01') }
+      it { expect(representation_orders[1].reference).to eq '1234567' }
+      it { expect(representation_orders[1].contract_number).to eq '1A234C' }
+      it { expect(representation_orders[1].date).to eq Date.parse('2024-09-02') }
+    end
+
+    context 'with multiple offences with the same representation order' do
+      let(:defendant_data) do
+        {
+          'offence_summaries' => [
+            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } },
+            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } }
+          ]
+        }
+      end
+
+      it { is_expected.to contain_exactly(instance_of(LAA::Cda::RepresentationOrder)) }
+      it { expect(representation_orders[0].reference).to eq '8765432' }
+      it { expect(representation_orders[0].contract_number).to eq '1A234B' }
+      it { expect(representation_orders[0].date).to eq Date.parse('2024-09-01') }
     end
   end
 end

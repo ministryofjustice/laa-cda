@@ -92,4 +92,23 @@ RSpec.describe LAA::Cda::RepresentationOrder do
       it { is_expected.to be_nil }
     end
   end
+
+  describe '#eql?' do
+    subject { representation_order.eql?(other) }
+
+    let(:representation_order_data) { { 'reference' => '1234567' } }
+
+    context 'when other is equal' do
+      let(:other) { described_class.new('reference' => '1234567') }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when other is not equal' do
+      let(:representation_order_data) { { 'reference' => '1234567' } }
+      let(:other) { described_class.new('reference' => '7654321') }
+
+      it { is_expected.to be false }
+    end
+  end
 end

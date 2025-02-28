@@ -7,8 +7,9 @@ module LAA
         @kwargs = kwargs
       end
 
-      def reference = @kwargs['laa_application_reference']
-      def contract_number = @kwargs['laa_contract_number']
+      def reference = @reference ||= @kwargs['reference'] || @kwargs['laa_application_reference']
+      def date = @date ||= Date.parse(@kwargs['status_date'])
+      def contract_number = @contract_number = @kwargs['contract_number'] || @kwargs['laa_contract_number']
 
       def start
         return if @kwargs['effective_start_date'].to_s == ''
@@ -24,6 +25,12 @@ module LAA
         @end ||= Date.parse(@kwargs['effective_end_date'])
       rescue Date::Error
         nil
+      end
+
+      def eql?(other)
+        return false unless other.is_a?(self.class)
+
+        reference == other.reference
       end
     end
   end

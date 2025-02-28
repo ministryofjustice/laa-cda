@@ -17,12 +17,23 @@ module LAA
         nil
       end
 
-      def offences = @kwargs['offence_summaries'].to_a.map { |offence| LAA::Cda::Offence.new(**offence) }
+      def offences
+        @kwargs['offence_summaries']
+          .to_a
+          .sort_by { |offence| offence['order_index'] }
+          .map { |offence| LAA::Cda::Offence.new(**offence) }
+      end
 
+      # TODO: Remove this method
+      # Representation order should be taken from the offence
       def representation_order
         return if @kwargs['representation_order'].to_h == {}
 
         LAA::Cda::RepresentationOrder.new(**@kwargs['representation_order'])
+      end
+
+      def representation_orders
+        @representation_orders ||= offences.map(&:representation_order).compact.uniq { |a, b| a.eql?(b) }
       end
 
       private

@@ -56,4 +56,31 @@ RSpec.describe LAA::Cda::Offence do
       it { is_expected.to be_empty }
     end
   end
+
+  describe '#representation_order' do
+    subject(:representation_order) { offence.representation_order }
+
+    context 'with a representation order' do
+      let(:offence_data) do
+        {
+          'laa_application' => {
+            'reference' => '8765432',
+            'status_date' => '2022-03-14',
+            'contract_number' => '1234567890'
+          }
+        }
+      end
+
+      it { is_expected.to be_an_instance_of(LAA::Cda::RepresentationOrder) }
+      it { expect(representation_order.reference).to eq '8765432' }
+      it { expect(representation_order.contract_number).to eq '1234567890' }
+      it { expect(representation_order.date).to eq Date.parse('2022-03-14') }
+    end
+
+    context 'without a representation order' do
+      let(:offence_data) { {} }
+
+      it { is_expected.to be_nil }
+    end
+  end
 end
