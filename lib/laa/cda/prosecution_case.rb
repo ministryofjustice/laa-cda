@@ -19,7 +19,7 @@ module LAA
         @case_number = kwargs['prosecution_case_reference']
         @status = kwargs['case_status']
         @defendants = kwargs['defendant_summaries'].to_a.map { |defendant| LAA::Cda::Defendant.new(**defendant) }
-        @hearings = kwargs['hearing_summaries'].to_a.map { |hearing| LAA::Cda::Hearing.new(**hearing) }
+        @hearings = kwargs['hearing_summaries'].to_a.map { |hearing| LAA::Cda::HearingSummary.new(**hearing) }
       end
     end
   end

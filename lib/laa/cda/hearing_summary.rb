@@ -2,7 +2,7 @@
 
 module LAA
   module Cda
-    class Hearing
+    class HearingSummary
       def initialize(**kwargs)
         @kwargs = kwargs
       end

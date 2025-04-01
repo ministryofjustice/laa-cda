@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'laa/cda/hearing'
+require 'laa/cda/hearing_summary'
 
-RSpec.describe LAA::Cda::Hearing do
+RSpec.describe LAA::Cda::HearingSummary do
   subject(:hearing) { described_class.new(**hearing_data) }
 
   describe '#id' do

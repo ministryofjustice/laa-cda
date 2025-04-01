@@ -105,7 +105,7 @@ RSpec.describe LAA::Cda::ProsecutionCase do
     end
 
     describe '#hearings' do
-      subject { prosecution_case.hearings }
+      subject(:hearings) { prosecution_case.hearings }
 
       let(:case_data) do
         {
@@ -136,7 +136,10 @@ RSpec.describe LAA::Cda::ProsecutionCase do
         }
       end
 
-      it { is_expected.to contain_exactly(instance_of(LAA::Cda::Hearing), instance_of(LAA::Cda::Hearing)) }
+      it do
+        expect(hearings)
+          .to contain_exactly(instance_of(LAA::Cda::HearingSummary), instance_of(LAA::Cda::HearingSummary))
+      end
     end
   end
 end
