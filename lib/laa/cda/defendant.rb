@@ -33,7 +33,7 @@ module LAA
       end
 
       def representation_orders
-        @representation_orders ||= offences.map(&:representation_order).compact.uniq { |a, b| a.eql?(b) }
+        @representation_orders ||= offences.map(&:representation_order).compact.uniq(&:reference)
       end
 
       private

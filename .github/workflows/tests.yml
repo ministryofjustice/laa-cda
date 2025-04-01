@@ -1,0 +1,44 @@
+name: Tests
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  rspec:
+    name: Run RSpec tests
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.accepted-failure }}
+    strategy:
+      matrix:
+        ruby-version: ['3.3', '3.4']
+        accepted-failure: [false]
+        include:
+          - ruby-version: 'head'
+            accepted-failure: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install dependencies
+        run: bundle install
+      - name: Run RSpec
+        run: bundle exec rspec || ${{ matrix.accepted-failure }}
+  rubocop:
+    name: Run RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+      - name: Install dependencies
+        run: bundle install
+      - name: Run RuboCop
+        run: bundle exec rubocop

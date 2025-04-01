@@ -91,7 +91,7 @@ RSpec.describe LAA::Cda::Defendant do
   end
 
   describe '#offences' do
-    subject { defendant.offences }
+    subject(:offences) { defendant.offences }
 
     context 'with offence summaries' do
       let(:defendant_data) do
@@ -116,7 +116,7 @@ RSpec.describe LAA::Cda::Defendant do
         end
 
         it 'returns the offences in order' do
-          expect(subject.map(&:title)).to eq ['Offence 1', 'Offence 2', 'Offence 3']
+          expect(offences.map(&:title)).to eq ['Offence 1', 'Offence 2', 'Offence 3']
         end
       end
     end
@@ -182,7 +182,8 @@ RSpec.describe LAA::Cda::Defendant do
       let(:defendant_data) do
         {
           'offence_summaries' => [
-            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } }
+            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01',
+                                     'contract_number' => '1A234B' } }
           ]
         }
       end
@@ -197,13 +198,26 @@ RSpec.describe LAA::Cda::Defendant do
       let(:defendant_data) do
         {
           'offence_summaries' => [
-            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } },
-            { 'laa_application' => { 'reference' => '1234567', 'status_date' => '2024-09-02', 'contract_number' => '1A234C' } }
+            {
+              'laa_application' => {
+                'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B'
+              }
+            },
+            {
+              'laa_application' => {
+                'reference' => '1234567', 'status_date' => '2024-09-02', 'contract_number' => '1A234C'
+              }
+            }
           ]
         }
       end
 
-      it { is_expected.to contain_exactly(instance_of(LAA::Cda::RepresentationOrder), instance_of(LAA::Cda::RepresentationOrder)) }
+      it do
+        expect(representation_orders).to contain_exactly(
+          instance_of(LAA::Cda::RepresentationOrder), instance_of(LAA::Cda::RepresentationOrder)
+        )
+      end
+
       it { expect(representation_orders[0].reference).to eq '8765432' }
       it { expect(representation_orders[0].contract_number).to eq '1A234B' }
       it { expect(representation_orders[0].date).to eq Date.parse('2024-09-01') }
@@ -216,8 +230,16 @@ RSpec.describe LAA::Cda::Defendant do
       let(:defendant_data) do
         {
           'offence_summaries' => [
-            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } },
-            { 'laa_application' => { 'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B' } }
+            {
+              'laa_application' => {
+                'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B'
+              }
+            },
+            {
+              'laa_application' => {
+                'reference' => '8765432', 'status_date' => '2024-09-01', 'contract_number' => '1A234B'
+              }
+            }
           ]
         }
       end
