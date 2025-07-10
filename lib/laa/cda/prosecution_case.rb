@@ -8,9 +8,9 @@ module LAA
       def self.search(**kwargs)
         JSON.parse(
           LAA::Cda.connection.request(
-            :get,
+            :post,
             'api/internal/v2/prosecution_cases',
-            params: { filter: kwargs }
+            body: { filter: kwargs }
           ).body
         )['results'].map { |result| new(**result) }
       end

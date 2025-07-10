@@ -27,8 +27,8 @@ RSpec.describe LAA::Cda::ProsecutionCase do
             headers: { 'content-type': 'application/json' }
           )
 
-        stub_request(:get, 'http://example.com/api/internal/v2/prosecution_cases')
-          .with(query: hash_including({ filter: search_params }))
+        stub_request(:post, 'http://example.com/api/internal/v2/prosecution_cases')
+          .with(body: hash_including({ filter: search_params }))
           .to_return(
             status: 200, body: response_data.to_json,
             headers: { 'content-type': 'application/json' }
